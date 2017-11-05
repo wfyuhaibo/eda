@@ -1,15 +1,12 @@
-Git is a version control system.
-Git is free software.
+1ã€åŸºäºŽç‰©ç†åŒ–å­¦æ€§è´¨çš„è‘¡è„é…’è´¨é‡çš„å¯è§†åŒ–è¯„ä»·ç ”ç©¶ çŽ‹é‡‘ç”²ã€å°¹æ¶›ç­‰ï¼Œç‡•å±±å¤§å­¦å­¦æŠ¥ï¼Œ2010å¹´3æœˆ.
+2ã€ç»Ÿè®¡åˆ†æžåœ¨è‘¡è„é…’è´¨é‡è¯„ä»·ä¸­çš„åº”ç”¨ æŽè¿ï¼ŒæŽè®°æ˜Žç­‰ï¼Œé…¿é…’ç§‘æŠ€ï¼Œ2009.
+3ã€http://blog.csdn.net/hongweigg/article/details/49387079 Rè¯­è¨€å› å­ä¸Žå‘é‡çš„è½¬æ¢
+4ã€https://www.w3cschool.cn/r/r_overview.html
 
-1¡¢»ùÓÚÎïÀí»¯Ñ§ÐÔÖÊµÄÆÏÌÑ¾ÆÖÊÁ¿µÄ¿ÉÊÓ»¯ÆÀ¼ÛÑÐ¾¿ Íõ½ð¼×¡¢ÒüÌÎµÈ£¬ÑàÉ½´óÑ§Ñ§±¨£¬2010Äê3ÔÂ.
-2¡¢Í³¼Æ·ÖÎöÔÚÆÏÌÑ¾ÆÖÊÁ¿ÆÀ¼ÛÖÐµÄÓ¦ÓÃ ÀîÔË£¬Àî¼ÇÃ÷µÈ£¬Äð¾Æ¿Æ¼¼£¬2009.
-3¡¢http://blog.csdn.net/hongweigg/article/details/49387079 RÓïÑÔÒò×ÓÓëÏòÁ¿µÄ×ª»»
-4¡¢https://www.w3cschool.cn/r/r_overview.html
-
-¶þ´ÎÌá½»µÄÐÞ¸Ä£º
-1¡¢ÔÚ¸üÊÊºÏÊ¹ÓÃº¯ÊýµÄÇé¿öÏÂ´´½¨ÁËº¯Êý²¢¶à´Îµ÷ÓÃ£¬Ö÷ÒªÔÚµ¥¡¢Ë«ºÍ¶à±äÁ¿µÄ»æÍ¼Ê±¡£
-2¡¢¶ÔÍ¼ÖÐ½øÐÐÁËlog×ª»»µÄ½øÐÐÁË±ê×¢
-3¡¢ggpairsÍ¼Æ¬½øÐÐÁË·Å´ó
-4¡¢Ë«±äÁ¿Í¼ÖÐÊ¹ÓÃqualityÎª¶¨Ðò±äÁ¿²¢Óë¸÷¸öÁ¬Ðø±äÁ¿×öÏäÐÎÍ¼¡£
-5¡¢¶à±äÁ¿Í¼ÖÐÒ²Ê¹ÓÃqualityÎª¶¨Ðò±äÁ¿
-6¡¢·´Ë¼ÖÐÌí¼ÓÁË¶ÔÊý¾Ý¼¯×ö½øÒ»²½·ÖÎöµÄÕ¹Íû¡£
+äºŒæ¬¡æäº¤çš„ä¿®æ”¹ï¼š
+1ã€åœ¨æ›´é€‚åˆä½¿ç”¨å‡½æ•°çš„æƒ…å†µä¸‹åˆ›å»ºäº†å‡½æ•°å¹¶å¤šæ¬¡è°ƒç”¨ï¼Œä¸»è¦åœ¨å•ã€åŒå’Œå¤šå˜é‡çš„ç»˜å›¾æ—¶ã€‚
+2ã€å¯¹å›¾ä¸­è¿›è¡Œäº†logè½¬æ¢çš„è¿›è¡Œäº†æ ‡æ³¨
+3ã€ggpairså›¾ç‰‡è¿›è¡Œäº†æ”¾å¤§
+4ã€åŒå˜é‡å›¾ä¸­ä½¿ç”¨qualityä¸ºå®šåºå˜é‡å¹¶ä¸Žå„ä¸ªè¿žç»­å˜é‡åšç®±å½¢å›¾ã€‚
+5ã€å¤šå˜é‡å›¾ä¸­ä¹Ÿä½¿ç”¨qualityä¸ºå®šåºå˜é‡
+6ã€åæ€ä¸­æ·»åŠ äº†å¯¹æ•°æ®é›†åšè¿›ä¸€æ­¥åˆ†æžçš„å±•æœ›ã€‚
