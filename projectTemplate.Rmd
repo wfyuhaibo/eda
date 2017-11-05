@@ -1,0 +1,374 @@
+红酒中化学成分对酒质量的影响分析
+========================================================
+
+```{r echo=FALSE, message=FALSE, warning=FALSE, packages}
+# Load all of the packages that you end up using
+# in your analysis in this code chunk.
+
+# Notice that the parameter "echo" was set to FALSE for this code chunk.
+# This prevents the code from displaying in the knitted HTML output.
+# You should set echo=FALSE for all code chunks in your file.
+
+library(ggplot2)
+library(knitr)
+library(dplyr)
+library(RColorBrewer)
+```
+
+```{r echo=FALSE, Load_the_Data}
+# Load the Data
+wqr <- read.csv('wineQualityReds.csv')
+```
+
+#一、单一变量部分
+```{r echo=FALSE, Univariate_Plots1}
+dim(wqr)
+```
+红葡萄酒质量数据集中1599个观察值，13个变量
+```{r echo=FALSE, Univariate_Plots2}
+str(wqr)
+names(wqr)
+summary(wqr)
+```
+```{r echo=FALSE, message=FALSE,warning=FALSE,Univariate_Plots3}
+#创建单变量的绘图函数Univariate
+Univariate <- function(xlabel,bin){
+  ggplot(aes_string(xlabel),data = wqr)+
+  geom_histogram(binwidth = bin)
+}
+#变量quality
+Univariate('quality',bin=0.5)+
+  scale_x_continuous(breaks = c(3:9))
+table(wqr$quality)
+summary(wqr$quality)
+```
+红酒的质量分数在0分（非常差）和10分（非常好）之间。本数据集中的红酒质量评分在3分~8分，其中绝大多数的评分为5分和6分。是否说明市场中的中端红酒就是最多的，或者在红酒发酵的过程中产生的中档酒是最多的？
+
+```{r echo=FALSE, message=FALSE,warning=FALSE,Univariate_Plots4}
+#变量fixed.acidity
+Univariate('fixed.acidity',0.1)+
+  scale_x_continuous(breaks = seq(4.5,16.0,0.5))
+summary(wqr$fixed.acidity)
+Univariate('fixed.acidity',0.1)+
+  scale_x_continuous(breaks = seq(4.5,16.0,0.5),limits = c(4.5,14.0))
+#变量volatile.acidity
+Univariate('volatile.acidity',0.005)
+summary(wqr$volatile.acidity)
+Univariate('volatile.acidity',0.005)+
+  scale_x_continuous(breaks = seq(0.1,1.0,0.1),limits = c(0.1,1.0))
+#变量citric.acid
+Univariate('citric.acid',0.01)
+```
+
+红酒数据集中的fixed.acidity（非挥发性酸度）的值大部分位于6.5-9.5(g/dm<sup>3</sup>)之间；
+
+volatile.acidity(挥发性酸度)的值大部分位于0.3-0.7(g/dm<sup>3</sup>)之间；
+
+citric.acid(柠檬酸)的值大部分小于0.5(g/dm<sup>3</sup>)，且含量为0(g/dm<sup>3</sup>)的红酒数量最多。
+
+将fixed.acidity和volatile.acidity两种酸度的直方图都对其作了限制x轴的处理，略去了一些数量较小的值，使其显示的更加直观。三种酸度的值在数据集中的数值区间都比较集中，我猜测酸度与酒的品质密切相关。
+
+```{r echo=FALSE, message=FALSE,warning=FALSE,Univariate_Plots5}
+#变量residual.sugar
+Univariate('residual.sugar',0.1)
+summary(wqr$residual.sugar)
+Univariate('residual.sugar',0.01)+
+  scale_x_continuous(breaks = seq(1,4,0.2),limits = c(1,4))
+#变量chlorides
+Univariate('chlorides',0.001)
+summary(wqr$chlorides)
+Univariate('chlorides',0.001)+
+  scale_x_continuous(breaks = seq(0.01,0.15,0.01),limits = c(0.01,0.15))
+#变量sulphates
+Univariate('sulphates',0.01)
+summary(wqr$sulphates)
+Univariate('sulphates',0.01)
+  scale_x_continuous(breaks = seq(0.3,1.0,0.1),limits = c(0.3,1.0))
+```
+
+residual.sugar(残留糖分)的值大部分位于1.8-2.6(g/dm<sup>3</sup>)之间：median：2.2g/dm<sup>3</sup>，mean：2.539g/dm<sup>3</sup>。
+
+chlorides(氯化物)的值大部分位于0.06-0.10(g/dm<sup>3</sup>)之间：median：0.079g/dm<sup>3</sup>，mean：0.08747g/dm<sup>3</sup>。
+
+sulphates(硫酸盐)的值大部分位于0.5-0.8(g/dm<sup>3</sup>)之间：median：0.62g/dm<sup>3</sup>，mean：0.6581g/dm<sup>3</sup>。
+
+从三个变量的初始图中可以看出，它们都有一些异常值，对异常值进行处理后把图像放大，使得图像更加直观
+
+```{r echo=FALSE, message=FALSE,warning=FALSE,Univariate_Plots6}
+#变量free.sulfur.dioxide
+Univariate('free.sulfur.dioxide',1)
+summary(wqr$free.sulfur.dioxide)
+Univariate('free.sulfur.dioxide',0.05)+
+  scale_x_log10()+
+  ggtitle('游离二氧化硫取对数后的直方图')
+#变量total.sulfur.dioxide
+Univariate('total.sulfur.dioxide',1)
+summary(wqr$total.sulfur.dioxide)
+Univariate('total.sulfur.dioxide',0.05)+
+  scale_x_log10()+
+  ggtitle('总二氧化硫取对数后的直方图')
+#变量alcohol
+Univariate('alcohol',0.1)
+summary(wqr$alcohol)
+Univariate('alcohol',0.01)+
+  scale_x_log10()+
+  ggtitle('酒精度取对数后的直方图')
+```
+
+free.sulfur.dioxide(游离二氧化硫)的值大部分位于7-20(mg/dm<sup>3</sup>)之间：median：14mg/dm<sup>3</sup>，mean：15.87mg/dm<sup>3</sup>。
+
+total.sulfur.dioxide(总二氧化硫)的值大部分位于30-60(mg/dm<sup>3</sup>)之间：median：38mg/dm<sup>3</sup>，mean：46.47mg/dm<sup>3</sup>。
+
+alcohol(酒精度)的值大部分位于9-11之间：median：10.02，mean：10.42。
+
+从三个变量的初始图中可以看出，它们都属于长尾数据，对其进行对数化处理后使得各个变量的分布更加便于理解。
+
+酒精度的直方图中，数据集中的酒精度非常集中，因此我认为酒精度和酒的质量密切相关。
+
+```{r echo=FALSE, message=FALSE,warning=FALSE,Univariate_Plots7}
+#变量density
+Univariate('density',0.0001)
+summary(wqr$density)
+#变量pH
+Univariate('pH',0.01)
+summary(wqr$pH)
+```
+
+density(密度)的值大部分位于0.995-0.998(g/cm<sup>3</sup>)之间：median：0.9968g/cm<sup>3</sup>，mean：0.9978g/cm<sup>3</sup>。
+
+pH的值大部分位于3.2-3.5之间：median：3.31，mean：3.311。
+
+上面两个直方图中，密度和PH的变化不大，因此我认为密度和PH值对酒的质量也有影响。
+
+
+```{r echo=FALSE, message=FALSE,warning=FALSE,Univariate_Plots8}
+wqr$total_acid <- wqr$fixed.acidity+wqr$volatile.acidity+wqr$citric.acid
+#变量total_acid
+Univariate('total_acid',0.1)+
+  scale_x_continuous(breaks = seq(4.5,17.0,0.5))
+summary(wqr$total_acid)
+wqr$ sulfur.dioxide_ratio<- wqr$free.sulfur.dioxide/wqr$total.sulfur.dioxide
+#变量sulfur.dioxide_ratio
+ggplot(aes(x=sulfur.dioxide_ratio),data = wqr)+
+  geom_histogram()
+summary(wqr$sulfur.dioxide_ratio)
+```
+
+经查阅文献，影响红酒品质的因素比较复杂，但酒精度是直接影响红酒感官品质的因素，其中酒精是原料中的糖分发酵而来，因此残糖的含量也影响红酒品质。同时总酸、PH值和游离二氧化硫的含量都会对红酒的品质产生较大的影响，且红酒中总酸影响PH值，PH值又会影响游离二氧化硫的含量，使其转化为固定二氧化硫。因此我创建了二个变量，分别为总酸（total_acid）和游离二氧化硫和总二氧化硫的比率（sulfur.dioxide_ratio），并创建了它们的直方图。
+
+# 单一变量分析：
+
+### 您的数据集的结构是什么?
+红葡萄酒数据包括1599个的红葡萄酒样本其中输入变量有11个，分别是fixed.acidity（固定酸）、volatile.acidity（挥发性酸）、citric.acid（柠檬酸）、residual.sugar（残糖）、chlorides（氯化物）、free.sulfur.dioxide（游离二氧化硫）、total.sulfur.dioxide（总二氧化硫）、density（密度）、pH、sulphates（硫酸盐）、alcohol（酒精度）。输出变量基于感觉数据(葡萄酒专家提出的至少3个评价的均值)，是quality（葡萄酒质量），评分为0至1O，每位专家的葡萄酒质量分级介于0(极坏的)和10(非常优秀)，极好的和极差的葡萄酒的样本都是少数，评价为中间的葡萄酒样本最多。此数据集中，分别评价为3至8。
+
+其他的观察：
+
+  1、5分和6分的红酒是最多的
+  
+  2、酒精度的中位数为10.02
+  
+  3、酒的密度基本一致
+  
+  4、酒的PH值基本在3.2-3.4之间
+  
+  5、柠檬酸的值大部分小于0.5(g/dm3)
+
+### 你对数据集中最感兴趣的特征是什么?
+数据集中我最感兴趣的特征是酒精度和质量。
+
+### 您认为数据集中还有哪些特征将有助于支持您对其感兴趣的特征的调查?
+酸度、残糖、PH、游离二氧化硫
+
+### 您是否从数据集的现有变量中创建了新的变量?
+我创建了总酸（total_acid）和游离二氧化硫和总二氧化硫的比率（sulfur.dioxide_ratio）两个变量
+
+### 在你调查的这些特征中，有什么不同寻常的分布吗?您是否对数据进行了操作，以进行整理、调整或更改数据的形式?如果是，你为什么要这么做?
+1、free.sulfur.dioxide(游离二氧化硫)、total.sulfur.dioxide(总二氧化硫)、alcohol(酒精度)从三个变量的初始图中可以看出，它们都属于长尾数据，对其进行对数化处理后使得各个变量的分布更加便于理解。
+
+2、residual.sugar(残留糖分)、chlorides(氯化物)、sulphates(硫酸盐)从三个变量的初始图中可以看出，它们都有一些异常值，对异常值进行处理后把图像放大，使得图像更加直观
+
+
+# 两个变量部分
+```{r echo=FALSE, message=FALSE,warning=FALSE, Bivariate_Plots}
+wqr_new <- wqr[,-c(1)]
+cor(wqr_new)
+```
+```{r echo=FALSE, message=FALSE,warning=FALSE, Bivariate_Plots2,fig.width = 15, fig.height = 15}
+library(GGally)
+ggpairs(wqr_new)
+```
+
+通过上面的表格和图片可以发现：红酒的质量与酒精度的相关性系数最大，符合之前的估计；同时质量与挥发性酸的相关性也较强，我们还可以看出创建的两个变量与质量之间有一定的相关性但是并不大。下面，我将利用散点图来可视化各个变量与质量之间的关系。
+```{r echo=FALSE, message=FALSE,warning=FALSE, Bivariate_Plots3}
+#创建双变量的绘图函数Univariate
+Bivariate <- function(xlabel,ylabel){
+  ggplot(aes_string(xlabel, ylabel), data = wqr) +
+  geom_jitter( alpha = 0.1)  +
+  geom_boxplot( alpha = 0.5)+
+  stat_summary(fun.y = mean,geom = 'point',shape = 4)
+}
+ggplot(aes(factor(quality),alcohol),data = wqr)+
+  geom_point()
+Bivariate('factor(quality)','alcohol')
+```
+
+仅对酒精度和质量作最简单的散点图并不能直观的发现它们之间的关系，因此我对其添加抖动和透明度;然后，我在散点图上画出两者的箱线图，通过箱线图中的均值点，我们同样可以得出结论：红酒质量与酒精度呈现线性相关性,酒精度越高，酒的品质越好。
+
+```{r echo=FALSE, message=FALSE,warning=FALSE, Bivariate_Plots4}
+library(memisc)
+m1 <- lm(I(alcohol) ~ I(quality), data = wqr)
+mtable(m1)
+```
+
+此外，查阅资料可知，酸度和质量的关系也很密切，因此我做了三种酸度和总酸的散点图，查看其是否对质量有影响。
+
+```{r echo=FALSE, message=FALSE,warning=FALSE, Bivariate_Plots5}
+Bivariate('factor(quality)','fixed.acidity')
+Bivariate('factor(quality)','volatile.acidity')
+Bivariate('factor(quality)','citric.acid')
+Bivariate('factor(quality)','total_acid')
+
+m2 <- lm(I(quality) ~ I(fixed.acidity), data = wqr)
+m3 <- lm(I(quality) ~ I(volatile.acidity), data = wqr)
+m4 <- lm(I(quality) ~ I(citric.acid), data = wqr)
+m5 <- lm(I(quality) ~ I(total_acid), data = wqr)
+mtable(m2,m3,m4,m5)
+```
+
+通过最开始的表格我观察到挥发性酸与酒的质量成明显的负相关性，因此我绘制了它们的散点图，并在散点图上画出两者的箱线图，通过箱线图中的均值点，我们可以得出的结论：挥发性酸的值越大，酒的质量越差。而柠檬酸则与质量成正相关，但是固定酸和总酸与质量的相关性不大。
+
+```{r echo=FALSE, message=FALSE,warning=FALSE, Bivariate_Plots6}
+Bivariate('factor(quality)','free.sulfur.dioxide')
+Bivariate('factor(quality)','total.sulfur.dioxide')+
+  ylim(0,150)
+Bivariate('factor(quality)','sulfur.dioxide_ratio')
+Bivariate('factor(quality)','sulphates')+
+  ylim(0.3,1.2)
+
+m6 <- lm(I(quality) ~ I(free.sulfur.dioxide), data = wqr)
+m7 <- lm(I(quality) ~ I(total.sulfur.dioxide), data = wqr)
+m8 <- lm(I(quality) ~ I(sulfur.dioxide_ratio), data = wqr)
+m9 <- lm(I(quality) ~ I(sulphates), data = wqr)
+mtable(m6,m7,m8,m9)
+```
+
+通过查阅资料我得到游离二氧化硫和总二氧化硫的比率与酒的质量具有相关性，因此我绘制了它们的散点图，并在散点图上画出两者的箱线图，通过箱线图中的均值点，我们可以得出的结论：两者的比率与红酒质量成正相关性,而总二氧化硫则与红酒质量负相关，所以我得出红酒中的二氧化硫在游离状态时，红酒的质量更高。同时，我还绘制了硫酸盐与质量的散点图，硫酸盐与红酒质量正相关。
+
+```{r echo=FALSE, message=FALSE,warning=FALSE, Bivariate_Plots7}
+Bivariate('factor(quality)','residual.sugar')+
+  ylim(1,4)
+Bivariate('factor(quality)','chlorides')+
+  ylim(0,0.2)
+Bivariate('factor(quality)','density')
+Bivariate('factor(quality)','pH')
+
+m10 <- lm(I(quality) ~ I(residual.sugar), data = wqr)
+m11 <- lm(I(quality) ~ I(chlorides), data = wqr)
+m12 <- lm(I(quality) ~ I(density), data = wqr)
+m13 <- lm(I(quality) ~ I(pH), data = wqr)
+mtable(m10,m11,m12,m13)
+```
+
+通过上面的图片我可以得到PH和残糖与酒的质量基本相关性不大，而密度和氯化物则与酒的质量呈现负相关性。
+
+# 两个变量分析：
+
+### 谈谈你在调查中观察到的一些关系。在数据集中，你感兴趣的特征是如何随着其他特征变化的? 
+我观察到红酒的质量与酒中的各项元素都有一定的关系，因此通过一些化学指标对红酒质量进行判断是一件非常困难的事情，但是，红酒质量与某些元素还是呈现了较强的相关性。其中，质量与酒精度、柠檬酸含量、硫酸盐含量以及创建的二氧化硫比率呈现正相关性，而红酒质量与挥发性酸、氯化物含量、密度以及PH值呈现负相关性。
+
+### 你有没有观察到其他特征之间的有趣关系(而不是兴趣的主要特征)?
+我还发现固定酸、挥发性酸和柠檬酸之间呈现强相关性。PH值与固定酸、柠檬酸和总酸之间有较强的负相关性。
+
+### 你发现的最强的关系是什么?
+我发现总酸与固定酸的关系最强，其次为总酸与PH值之间的关系。
+
+# 多变量部分
+由于在两个变量分析时，我们得到红酒质量与很多的元素都具有相关性，因此在这个模块我选择了几个相关性较大的元素来进行多个变量的分析。
+首先我把与红酒质量相关性最强的酒精度和挥发性酸进行多变量分析，得到的散点图如下：
+
+```{r echo=FALSE,message=FALSE,warning=FALSE, Multivariate_Plots}
+#创建多变量的绘图函数Multivariate
+Multivariate <- function(xlabel,ylabel,zlabel){
+  ggplot(aes_string(x = xlabel,y = ylabel,colour = zlabel), data = wqr) + 
+    geom_jitter(alpha = 0.2)+
+    scale_color_brewer(palette = "Blues") +
+    geom_smooth(method = "lm", se = FALSE,size=1) 
+}
+Multivariate('alcohol','volatile.acidity','factor(quality)')
+
+m14 <- lm(I(quality) ~ I(alcohol)+volatile.acidity, data = wqr)
+mtable(m14)
+```
+由上图我们可以看到，当酒精浓度比较低时，不管挥发性酸如何变化，红酒的质量都不高；当挥发性酸比较高时，不管酒精浓度如何变化，红酒质量也不会高。只有在两者都在比较好的区间内，质量才会比较好。
+
+```{r echo=FALSE, message=FALSE,warning=FALSE,Multivariate_Plots2}
+Multivariate('alcohol','citric.acid','factor(quality)')+
+  scale_y_continuous(breaks = seq(0.1,0.9,0.1),limits = c(0.1,0.9))
+```
+
+由上图我们可以看到，柠檬酸的含量对酒质量的影响要弱于酒精度，但是由图中还是可以看出在柠檬酸含量低时，即便有些酒的酒精度高，但是酒的质量并不高；而柠檬酸含量高时，酒的质量要优于柠檬酸含量低的红酒。
+
+```{r echo=FALSE,message=FALSE,warning=FALSE, Multivariate_Plots3}
+Multivariate('alcohol','sulphates','factor(quality)')+
+  scale_y_continuous(breaks = seq(0.1,1.2,0.1),limits = c(0.3,1.2))
+```
+
+由上图我们可以看到，硫酸盐对红酒质量的影响基本和柠檬酸类似。虽然硫酸盐与红酒质量呈现一定的正相关趋势，但仍然不如酒精度对质量的影响。
+
+```{r echo=FALSE, message=FALSE,warning=FALSE,Multivariate_Plots4}
+Multivariate('volatile.acidity','citric.acid','factor(quality)')+
+  scale_y_continuous(breaks = seq(0.1,0.9,0.1),limits = c(0.1,0.9))
+```
+```{r echo=FALSE,message=FALSE,warning=FALSE, Multivariate_Plots5}
+Multivariate('volatile.acidity','sulphates','factor(quality)')+
+  scale_y_continuous(breaks = seq(0.1,1.2,0.1),limits = c(0.1,1.2))
+```
+
+由上面的两个图片我们可以看到，硫酸盐和柠檬酸对红酒质量的影响虽然存在但仍然不如挥发性酸对红酒质量的影响。结合之前的结论，我得出对于红酒的质量最主要的两个影响因素就是酒精度和挥发性酸的含量，当这两者的含量较高或较低时，红酒质量主要由这两者影响；当这两者的含量居中时，其他因素才会对红酒质量产生明显的影响。
+
+# 多变量分析
+
+### 谈谈你在调查中观察到的一些关系。是否有一些特征在你关注的兴趣方面加强了彼此? 特征之间有什么有趣或令人惊讶的相互作用吗?
+在多变量分析时，在加入其他的因素之后，并没有加强质量与酒精度和挥发性酸的关系。因此经过多变量分析，可以得出，红酒质量与酒精度和挥发性酸的关系最为密切。
+
+------
+
+# 最后的图和总结
+
+### 图一
+```{r echo=FALSE, message=FALSE,warning=FALSE,Plot_One}
+Univariate('quality',bin=0.5)+
+  scale_x_continuous(breaks = c(3:9))+
+  ggtitle('质量分布')
+```
+
+### 描述一
+红酒的质量分数在0分（非常差）和10分（非常好）之间。本数据集中的红酒质量评分在3分~8分，其中绝大多数的评分为5分和6分，极好的和极差的葡萄酒的样本都是少数。
+
+### 图二
+```{r echo=FALSE, message=FALSE,warning=FALSE,Plot_Two}
+Bivariate('factor(quality)','alcohol')+
+  ggtitle('酒精度与质量图')
+Bivariate('factor(quality)','volatile.acidity')+
+  ggtitle('挥发性酸与质量图')
+```
+
+### 描述二
+由图二的两幅图我得出红酒质量与酒精度呈现正相关性，酒精度越高，酒的品质越好。挥发性酸与酒的质量成明显的负相关性，挥发性酸的值越大，酒的质量越差。
+
+### 图三
+```{r echo=FALSE, message=FALSE,warning=FALSE,Plot_Three}
+Multivariate('alcohol','volatile.acidity','factor(quality)')+
+  ggtitle('红酒质量与酒精度和挥发性酸的关系图')
+```
+
+### 描述三
+图三利用质量作为结果变量和挥发性酸作为输入变量，构造一个线性模型来预测红酒的质量。由图三可以得出，在酒精度高，挥发性酸低时，红酒质量会比较不错；而当酒精度低，挥发性酸高时，红酒质量普遍较差。
+
+------
+
+# 反思
+    红葡萄酒数据包括1599个的红葡萄酒样本的信息。其中输入变量有11个，分别是fixed.acidity（固定酸）、volatile.acidity（挥发性酸）、citric.acid（柠檬酸）、residual.sugar（残糖）、chlorides（氯化物）、free.sulfur.dioxide（游离二氧化硫）、total.sulfur.dioxide（总二氧化硫）、density（密度）、pH、sulphates（硫酸盐）、alcohol（酒精度）。输出变量基于感觉数据(葡萄酒专家提出的至少3个评价的均值)，是quality（葡萄酒质量），评分为0至1O，每位专家的葡萄酒质量分级介于0(极坏的)和10(非常优秀)。我首先了解了数据集中的各个变量，然后我探索了有趣的问题，并在继续对绘图进行观察。最终，我在许多变量中探索了红酒的质量与红酒中各个元素的关系。
+    首先，极好的和极差的葡萄酒的样本都是少数，评价为中间的葡萄酒样本最多，此数据集中，分别评价为3至8。然后，我观察到红酒的质量与酒中的各项元素都有一定的关系，因此通过一些化学指标对红酒质量进行判断是一件非常困难的事情。但是，红酒质量与某些元素还是呈现了较强的相关性。其中，质量与酒精度、柠檬酸含量、硫酸盐含量以及创建的二氧化硫比率呈现正相关性，而红酒质量与挥发性酸、氯化物含量、密度以及PH值呈现负相关性。最后，在多变量分析时，在加入其他的因素之后，并没有加强质量与酒精度和挥发性酸的关系。因此经过多变量分析，可以得出，红酒质量与酒精度和挥发性酸的关系最为密切。
+    在整个分析过程中，我引入了总酸和二氧化硫的含量比两个特征，但是经过分析，这两个变量对于红酒质量的影响不是很大。
+    最后，在分析红酒数据时，我应该查阅更多的资料，找到与一个新的特征来研究其与红酒质量的关系。另外，本数据集中的红酒质量是人进行打分的，具有很强的主观性和偶然性，因此在研究红酒中个元素与质量的关系时也会产生一定的影响。同时，在学习了第三部分的课程后，可以尝试用PCA算法来生成新的变量来研究其与红酒质量的关系，在红酒的生产过程中通过控制这些变量的值来提高红酒的质量。此外，自己在统计学和R语言方面的知识还十分的欠缺，需要自己进一步的学习，可以寻找一些更加优秀的方法来探究红酒数据集。
